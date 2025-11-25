@@ -114,3 +114,33 @@ Both GRPO stages (Stage 1 and Stage 2) use the same Chat-style prompt; the two s
   }
 ]
 ````
+
+### Table Serialization Format
+
+In all experiments, the placeholder `[TABLE_CONTENT]` is instantiated as a **GitHub‑flavored Markdown table string** (plain-text Markdown, not JSON/CSV/HTML):
+
+- The table is rendered as Markdown using the pipe (`|`) syntax with one header row, one alignment row (`| --- | ... |`), and one row per record, exactly as in the example in the paper.
+- Column order in `[TABLE_CONTENT]` matches the original dataset schema; we do not reorder columns.
+- Row order is preserved from the underlying dataset without sorting or filtering (unless explicitly stated for a benchmark).
+- Cell values are inserted as-is from the dataset (including commas, percentage signs, and other punctuation); missing cells are left empty.
+- The line `Table Title: [TABLE_TITLE]` is plain text, where `[TABLE_TITLE]` is the human-readable table name from the dataset.
+
+### Decoding and Sampling Parameters
+
+We summarize the decoding configuration used in our main results; all values are also encoded in the provided shell scripts.
+
+- Evaluation (script `sh/STaR-eval.sh`):
+  - Number of stochastic passes per example: `N_PASSES = 8` (`data.n_samples=8`).
+  - Temperature: `0.6` (`rollout.temperature=0.6`).
+  - Top-p: `0.95` (`rollout.top_p=0.95`).
+  - Top-k: disabled (`rollout.top_k=-1`).
+  - Max prompt length: `8192` tokens (`rollout.prompt_length=8192`).
+  - Max response length: `4096` tokens (`rollout.response_length=4096`).
+  - Batch size during generation: `1024` examples (`data.batch_size=1024`).
+  - For each example, all samples, log-probabilities, and entropies are saved; the final answer is selected by `eval-by-trajectory.py` using the consistency–confidence fusion rule.
+
+- GRPO training (scripts `sh/STaR-sft-stage1-*.sh`, `sh/STaR-sft-stage1-stage2-*.sh`):
+  - Number of sampled trajectories per prompt: `rollout_n = 5` (Stage 1) or `rollout_n = 8` (Stage 2).
+  - Training sampling temperature: `train_temperature = 1.0`.
+  - Validation sampling temperature: `val_temperature = 0.6` with `do_sample=True`, `n=1`.
+  - Other decoding hyperparameters not explicitly set in these scripts use the defaults of the `verl` framework.
