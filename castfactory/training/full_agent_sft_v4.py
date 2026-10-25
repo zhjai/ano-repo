@@ -147,11 +147,13 @@ def _complete_rows(rows):
     for case_id, calls in grouped.items():
         front = [r for r in calls if r.get("role") == "T1"]
         counts = Counter(r.get("role") for r in calls)
-        if len(front) != 1 or not counts["T2"] or not counts["T3"]:
+        if len(front) != 1 or not counts["T2"]:
             raise ValueError("Incomplete four-role trajectory: " + str(case_id))
         mode = protocol.parse_reply(front[0]["assistant_response"], "student")["answer"].get("mode")
         if mode not in ("DIRECT", "FACTORIZE") or counts["T4"] != (1 if mode == "FACTORIZE" else 0):
             raise ValueError("T4 coverage must follow actual DIRECT/FACTORIZE plan")
+        if mode == "FACTORIZE" and not counts["T3"]:
+            raise ValueError("FACTORIZE requires T3 assessment: " + str(case_id))
         modes[mode] += 1
     return grouped, modes
 
@@ -210,7 +212,11 @@ def load_release(directory, tokenizer, max_tokens=None, *, profile_version=VERSI
     encoded = [encode_row(row, tokenizer, max_tokens) for row in rows]
     return encoded, {"profile_version": profile_version, "source": source, "role_rows": len(rows),
                      "complete": len(grouped), "rows_by_role": dict(Counter(r["role"] for r in rows)),
-                     "cases_by_mode": dict(modes), "skipped_incomplete_episodes": skipped,
+                     "cases_by_mode": dict(modes),
+                     "legacy_direct_reflection_episodes": sum(
+                         protocol.parse_reply(next(r for r in calls if r["role"] == "T1")["assistant_response"], "student")["answer"].get("mode") == "DIRECT"
+                         and any(r["role"] == "T3" for r in calls) for calls in grouped.values()),
+                     "skipped_incomplete_episodes": skipped,
                      "max_prompt_tokens": max(row["prompt_tokens"] for row in encoded),
                      "max_response_tokens": max(row["response_tokens"] for row in encoded),
                      "max_total_tokens": max(len(row["input_ids"]) for row in encoded),

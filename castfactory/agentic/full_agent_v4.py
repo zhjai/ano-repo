@@ -18,6 +18,7 @@ from castfactory.agentic.diagnostic_refinement import CONCERNS, INSTRUCTIONS
 
 
 VERSION = protocol.VERSION
+WORKFLOW_REVISION = "elecload-direct-t2-return-v1"
 JSON_ROWS_VERSION = "agentic-json-rows-v1"
 COMPACT_VERSION = "agentic-compact-markdown-v1"
 STEP_TARGET_VERSION = "agentic-compact-markdown-v2"
@@ -480,7 +481,8 @@ def execute_public(case: dict, caller: Callable, *, profile: Optional[Profile] =
     """Run the adopted workflow using only public evidence and actual model calls.
 
     Public T1 is accepted directly after validation. Initial T2 assignments are
-    independent; every successful revision is reassessed by T3 and every normal
+    independent. DIRECT returns after whole-horizon T2 without T3 or T4.
+    On FACTORIZE, every successful revision is reassessed by T3 and every normal
     FACTORIZE completion calls model T4. Failures retain separate fallback status.
     """
     return _execute(case, caller, profile=profile, reviewer=None,
@@ -494,7 +496,7 @@ def direct_cost_reference(case: dict, caller: Callable, *, profile: Optional[Pro
     """Actual constrained DIRECT T1 plus full-H T2 cost reference, without T3/T4.
 
     This explicit program_DIRECT_STOP_T1_T2 reference is distinct from normal
-    DIRECT execution, which still runs the model reflection loop.
+    DIRECT execution: the reference additionally constrains T1 to DIRECT.
     """
     return _execute(case, caller, profile=profile, reviewer=None,
                     on_accept=on_accept, response_format=response_format, public=True,
@@ -665,7 +667,7 @@ def _execute(case, caller, *, profile, reviewer, on_accept, response_format, pub
         if diagnostic_fixed_plan['answer']['mode'] != 'FACTORIZE':
             raise ValueError('Fixed plan must be a legal FACTORIZE plan')
     h = case["geometry"]["H"]
-    episode = {"profile_version": profile.profile_version, "profile": profile.record(),
+    episode = {"workflow_revision": WORKFLOW_REVISION, "profile_version": profile.profile_version, "profile": profile.record(),
                "case_id": case["case_id"], "source": case["source"], "split": case["split"],
                "geometry": deepcopy(case["geometry"]), "calls": [], "failures": [],
                "t1_pass1": None, "t1_review": None, "accepted_t1": None, "t1_supervision": None,
@@ -867,8 +869,9 @@ def _execute(case, caller, *, profile, reviewer, on_accept, response_format, pub
             reports[sid], own_history[sid] = result, [deepcopy(result)]
         continuation = DownstreamContinuation(case, profile, accepted, reports, own_history,
                                              episode, call, trace=transition_trace)
-        if direct_reference:
-            episode["termination"] = {"kind": "program_DIRECT_STOP_T1_T2", "refinements": 0}
+        if direct_reference or accepted["answer"]["mode"] == "DIRECT":
+            episode["termination"] = {"kind": "program_DIRECT_STOP_T1_T2" if direct_reference else "direct_forecast_complete",
+                                      "refinements": 0}
         else:
             continuation.run_reflection()
         final = continuation.finalize()

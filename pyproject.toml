@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "elecload"
-version = "0.1.0"
+version = "0.2.0"
 description = "Multiple-event electricity load forecasting runtime and episode SFT"
 requires-python = ">=3.10"
 dependencies = []

@@ -75,7 +75,7 @@ class Script:
 
 
 class FourRoleTeacherTests(unittest.TestCase):
-    def test_direct_h24_and_h96_use_actual_geometry_and_model_stop(self):
+    def test_direct_h24_and_h96_return_after_t2(self):
         for h in (24, 96):
             p = plan(h)
             caller = Script([("T1", protocol.render_reply("Whole horizon.", p)),
@@ -85,8 +85,8 @@ class FourRoleTeacherTests(unittest.TestCase):
             self.assertTrue(episode["normal_completion"])
             self.assertEqual(episode["final_values"], [123.456789] * h)
             self.assertEqual(episode["t4_status"], "not_applicable_DIRECT")
-            self.assertEqual([r for r, _ in caller.calls], ["T1", "T2", "T3"])
-            self.assertEqual(episode["termination"]["kind"], "model_STOP")
+            self.assertEqual([r for r, _ in caller.calls], ["T1", "T2"])
+            self.assertEqual(episode["termination"]["kind"], "direct_forecast_complete")
             self.assertEqual(episode["context_validation"], "unmeasured")
             json.dumps(episode, allow_nan=False)
 
@@ -232,8 +232,9 @@ class FourRoleTeacherTests(unittest.TestCase):
         self.assertEqual([r["role"] for r in sft_rows(episode)], ["T1"])
 
     def test_refinement_failure_retains_complete_forecast_and_truthful_status(self):
-        p = plan()
+        p = plan(cuts=[12])
         caller = Script([("T1", protocol.render_reply("Whole horizon.", p)), ("T2", t2(p["spans"][0], 42)),
+                         ("T2", t2(p["spans"][1], 42)),
                          ("T3", protocol.render_reply("Review shape.", refine())), ("T2", RuntimeError("revision failed"))])
         episode = execute(case(), caller, profile=Profile(structural_retries=0), reviewer=review_keep)
         self.assertEqual(episode["final_values"], [42] * 24)
@@ -394,8 +395,8 @@ class FourRoleTeacherTests(unittest.TestCase):
                          ("T2", t2(p["spans"][0])), ("T3", protocol.render_reply("Stop.", STOP))])
         episode = execute(case(), caller, reviewer=review_keep, on_accept=record)
         self.assertTrue(episode["normal_completion"])
-        self.assertEqual([m["role"] for m in markers], ["T1", "T2", "T3"])
-        self.assertEqual([m["call_id"] for m in markers], [0, 2, 3])
+        self.assertEqual([m["role"] for m in markers], ["T1", "T2"])
+        self.assertEqual([m["call_id"] for m in markers], [0, 2])
         self.assertEqual(markers[1]["messages"][2]["content"], bad)
         self.assertTrue(all(m["status"] == "accepted" for m in markers))
         self.assertEqual(episode["final_values"], [100] * 24)
@@ -487,7 +488,7 @@ class FourRolePublicTests(unittest.TestCase):
                              ("T3", self.reply("No supported refinement.", STOP))])
             episode = execute_public(c, caller)
             self.assertTrue(episode["normal_completion"])
-            self.assertEqual([role for role, _ in caller.calls], ["T1", "T2", "T3"])
+            self.assertEqual([role for role, _ in caller.calls], ["T1", "T2"])
             self.assertEqual(episode["final_values"], [123.456789] * h)
             self.assertEqual(episode["geometry"], before["geometry"])
             self.assertEqual(c, before)

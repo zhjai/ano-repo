@@ -20,7 +20,7 @@ python -m unittest discover -s tests -t . -v
 
 The demo uses synthetic inputs and explicitly scripted responses. It verifies execution mechanics and does not measure forecasting accuracy. The segmented example calls `T1 → T2 → T2 → T3 → T2 → T3 → T4`.
 
-In this initial source snapshot, ordinary DIRECT execution calls `T1 → T2 → T3`; T4 is skipped. The separate `direct_cost_reference` entrypoint restricts planning to DIRECT and returns after T2. See [runtime details](docs/runtime.md).
+DIRECT execution calls `T1 → T2` and returns without T3 or T4. The separate `direct_cost_reference` entrypoint additionally restricts planning to DIRECT. See [runtime details](docs/runtime.md).
 
 ## Inference with a local model
 

@@ -14,3 +14,7 @@ Portable adaptations:
 Excluded: credentials, personal host paths, task histories, operational logs, data, model weights, checkpoints, and unrelated STaR/VERL contents. The Git history is preserved. No new license grant for upstream or absent assets is asserted.
 
 Verification distinguishes standard-library contract tests, optional CPU model tests, and actual large-model/GPU experiments. Passing unit tests and scripted workflow demos is not a reproduction of the paper's measurements.
+
+The subsequent DIRECT correction changes the released runtime to return after whole-horizon T2, without T3/T4. It is a separate change from the source export. Existing paper measurements were not rerun or replaced.
+
+Final verification: 115 tests passed in the reference Python/PyTorch environment with GPU visibility disabled, including actual local tokenizer and tiny-model CPU tests (zero skips). The dependency-free environment passed the same suite with 11 optional ML/tokenizer checks skipped. The built wheel loaded all 20 prompt resources; synthetic workflow and separate-label evaluation CLI checks passed. No large-model GPU training or paper-result reproduction was run.

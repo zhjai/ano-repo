@@ -97,11 +97,11 @@ class FullAgentSFTV4Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = self.write_rows(directory, rows)
             manifest = Path(directory) / "manifest.json"
-            data = {"profile_version": sft.VERSION, "row_file": path.name, "complete": 2, "role_rows": 8}
+            data = {"profile_version": sft.VERSION, "row_file": path.name, "complete": 2, "role_rows": 7}
             manifest.write_text(json.dumps(data))
             features, report = full_agent_sft.load_release(manifest, object(), 10, profile_version=sft.VERSION)
             self.assertEqual(report["cases_by_mode"], {"DIRECT": 1, "FACTORIZE": 1})
-            self.assertEqual(report["rows_by_role"], {"T1": 2, "T2": 3, "T3": 2, "T4": 1})
+            self.assertEqual(report["rows_by_role"], {"T1": 2, "T2": 3, "T3": 1, "T4": 1})
             self.assertEqual(sft.training_plan(features, sft.TrainingConfig(**config()))["planned_optimizer_steps"], 2)
             data["role_rows"] = 9
             manifest.write_text(json.dumps(data))
@@ -118,7 +118,7 @@ class FullAgentSFTV4Tests(unittest.TestCase):
             failed["normal_completion"] = False
             episodes.joinpath("bad.json").write_text(json.dumps({"episode": failed}))
             features, report = sft.load_release(directory, object())
-            self.assertEqual(len(features), 3)
+            self.assertEqual(len(features), 2)
             self.assertEqual(report["skipped_incomplete_episodes"], 1)
             self.assertFalse(report["collection_complete"])
 
@@ -141,7 +141,7 @@ class FullAgentSFTV4Tests(unittest.TestCase):
             path = self.write_rows(directory, rows)
             manifest = Path(directory) / "manifest.json"
             manifest.write_text(json.dumps({"profile_version": sft.VERSION, "row_file": path.name,
-                                            "complete": 1800, "role_rows": 7200}))
+                                            "complete": 1800, "role_rows": 6300}))
             args = SimpleNamespace(**config(), dataset=manifest, out=Path(directory) / "train", model="unused",
                                    dry_run=True, profile_version=sft.VERSION, parameterization="full")
             def forbidden(*values):
@@ -157,7 +157,7 @@ class FullAgentSFTV4Tests(unittest.TestCase):
                 return {"status": "fake_backend_smoke", "all_parameters_trainable": True}
             trained = sft.train(args, tokenizer=object(), backend=backend)
             self.assertEqual(trained["status"], "fake_backend_smoke")
-            self.assertEqual(calls[0][1], 7200)
+            self.assertEqual(calls[0][1], 6300)
 
     def test_training_config_rejects_invalid_explicit_settings(self):
         for updates in ({"epochs": 0}, {"learning_rate": float("nan")}, {"warmup_ratio": 1.5}):

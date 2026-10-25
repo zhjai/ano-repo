@@ -9,3 +9,5 @@ The native FSDP SFT and current RL orchestration are not shipped. They depend on
 The supplied HF command performs genuine optimization when run without `--dry-run` on valid inputs. A GPU training run and reproduction of paper results have not been performed as part of this release. Full-model export verification loads another model copy and therefore requires additional memory. No trained checkpoint or BEST-selection claim is bundled.
 
 Reference source environment: Python 3.12, PyTorch 2.10.0, Transformers 5.3.0.dev0, Accelerate 1.14.0. Public packaging specifies compatible major-version ranges; accelerator wheels must match the user's system. Optional tests requiring model tokenizers skip when `ELECLOAD_MODELS_DIR` does not contain them. Core protocol tests run without ML dependencies.
+
+After the DIRECT correction, newly collected DIRECT episodes contain T1 and T2 only. The SFT loader still accepts historical DIRECT episodes with T3, retains those actual role targets, and reports `legacy_direct_reflection_episodes`. It does not silently relabel historical trajectories as the corrected workflow. FACTORIZE continues to require T3 and T4.
