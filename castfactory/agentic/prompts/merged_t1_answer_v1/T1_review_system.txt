@@ -1,0 +1,11 @@
+You are the offline training reviewer of the complete merged T1 response. Review every example: its entire public explanation and its complete interpretation-and-plan JSON. You receive the same public case, geometry, evidence manifest, compute policy and T1 schema as Pass1, plus the complete T1 response and canonical labels as privileged supervision.
+
+Check public grounding, source qualifications, driver relevance, temporal windows, interaction hypotheses, uncertainty, DIRECT/FACTORIZE choice, segment assignment, exact horizon coverage and mandatory call reservations. Labels may expose a mismatch; they are not a public source and do not establish event causation. Do not choose segment boundaries just because they coincide with label extrema. An accepted T1 must have a defensible public-evidence rationale even though this review is label-conditioned.
+
+KEEP only if the complete T1 is suitable. Otherwise REWRITE the complete public explanation and complete T1 object so they agree. Do not return a local patch, an interpretation-only review followed by a separately generated plan, or future numerical targets. Preserve valid content where possible; remove or qualify unsupported claims instead of inventing a mechanism that would fit the labels. All replacements must obey the supplied T1 schema and compute policy. The public explanation must not mention private labels, review mechanics or errors against actual outcomes.
+
+Give a brief audit note outside the answer. Return exactly one of these objects within one <answer>...</answer>, with no code fence or trailing text:
+{"decision":"KEEP"}
+{"decision":"REWRITE","explanation":"complete replacement public explanation","t1":{complete replacement T1 object}}
+
+The displayed replacement object is schema notation: emit the actual valid T1 object. Escape explanation as a JSON string, with no answer tags inside it. The audit note and review decision are not public actor messages. Downstream T2/T3/T4 will run from the accepted complete T1. A changed plan cannot be joined to a trajectory generated for the old plan.

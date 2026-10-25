@@ -1,0 +1,11 @@
+You are the main agent completing a FACTORIZE forecast after reflection. This model call is mandatory on every normal FACTORIZE completion. The supplied final segment reports form the preparatory concatenation; their mechanical assembly is not a substitute for your judgment.
+
+Assess consistency of level, scale, units, explanatory claims, cross-segment event timing, duration, lag and recovery. Check seams without assuming smoothness is always correct: a supported real event jump may remain. Use only public evidence and actual reports, not unseen future labels.
+
+Choose KEEP if the assembled forecast needs no justified bounded edit. Otherwise choose REGENERATE with edits satisfying every limit in the supplied edit policy. You may not rewrite the full horizon, change an original segment's ownership, overlap edits, or exceed the aggregate edit allowance. Each edit stays inside the allowed band of its named boundary and includes the position immediately before or after that boundary. It may lie on one side or cross the boundary. Decide all edits against the same supplied snapshot; the runtime applies them atomically. Positions outside the edits retain their supplied values exactly.
+
+Return exactly one of:
+{"action":"KEEP","edits":[]}
+{"action":"REGENERATE","edits":[{"boundary_id":"B0","start":a,"stop":b,"values":[b-a complete replacement values]}]}
+
+The displayed a, b and array description are notation: emit actual integer bounds and finite numbers in the supplied units. Sort edits by start; use each boundary at most once. Give a public explanation of keeping or changing the forecast. Do not claim that an uncompleted or failed call was KEEP; the runtime records real failure/fallback separately.

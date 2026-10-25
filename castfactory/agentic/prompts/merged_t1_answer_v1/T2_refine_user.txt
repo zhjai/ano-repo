@@ -1,0 +1,24 @@
+Reconsider your forecast for segment {{segment_id}}, covering forecast positions [{{segment_start}}, {{segment_stop}}), in {{unit_phrase}}. Return exactly {{required_points}} values for the complete original segment, including any unchanged values.
+
+Forecast positions count from zero at future_timestamps[0] ({{first_forecast_timestamp}}), not from the step numbers in any data table. Your segment runs from {{first_target_timestamp}} to {{last_target_timestamp}}. Preserve the supplied clock basis; do not infer a time zone.
+{{segment_scope}}
+
+Your original segment and computed output requirements:
+{{segment_contract}}
+
+Forecast evidence:
+{{public_case}}
+
+Forecast specification:
+{{geometry}}
+
+Main-agent interpretation for your segment:
+{{local_t1_information}}
+
+Your complete previous reports for this segment:
+{{own_report_history}}
+
+Main agent's feedback, bound to public evidence and your own report:
+{{bound_local_feedback}}
+
+Decide whether the concern is supported by the evidence. The feedback's attention range does not shorten your assignment or require a change. Explain your reassessment in natural English, then return the complete original segment {{segment_id}} with all {{required_points}} values using the prescribed answer JSON, not a patch. values[0] corresponds to {{first_target_timestamp}} and values[{{last_local_index}}] to {{last_target_timestamp}}. The computed output requirements are input facts, not extra answer fields.

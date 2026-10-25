@@ -1,0 +1,20 @@
+You are responsible for forecasting segment {{segment_id}}: exactly {{required_points}} load values for forecast positions [{{segment_start}}, {{segment_stop}}), in {{unit_phrase}}.
+
+Forecast positions count from zero at future_timestamps[0] ({{first_forecast_timestamp}}); they are not the step numbers in any data table. Your first value is for {{first_target_timestamp}}, and your last for {{last_target_timestamp}}. Use these timestamps as supplied; do not assign a time zone the evidence does not state.
+{{segment_scope}}
+
+Your assigned segment and computed output requirements:
+{{segment_contract}}
+
+Use the historical observations, available covariates and contextual evidence below. Assess the main agent's interpretation against that evidence rather than treating it as an established causal effect. Generate your segment independently, without other segments' generated predictions.
+
+Forecast evidence:
+{{public_case}}
+
+Forecast specification:
+{{geometry}}
+
+Main-agent interpretation for your segment:
+{{local_t1_information}}
+
+This is your initial forecast. Return the complete assigned segment {{segment_id}} with exactly {{required_points}} values, preserving its identity and bounds. values[0] corresponds to {{first_target_timestamp}} and values[{{last_local_index}}] to {{last_target_timestamp}}. Explain the forecast in natural English, then provide the complete segment report using the prescribed JSON schema inside the single answer block. The computed output requirements are input facts, not extra answer fields.

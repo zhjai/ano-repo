@@ -1,0 +1,18 @@
+Review the public explanation for this {{horizon_points}}-position electricity load forecast, from {{first_forecast_timestamp}} to {{last_forecast_timestamp}}, in {{unit_phrase}}. This is an offline, privileged review; the training labels below are not public forecasting evidence.
+
+Forecast evidence:
+{{public_case}}
+
+Forecast specification:
+{{geometry}}
+
+Complete first-pass public response:
+{{pass1_public_response}}
+
+Actual first-pass teacher prediction:
+{{pass1_values}}
+
+Privileged canonical training labels, in the same timestamp order and units:
+{{canonical_labels}}
+
+Apply the prescribed explanation-review rules and return KEEP or a complete rewritten public explanation using the review answer JSON. Do not rewrite the prediction or disclose privileged labels in the public explanation.

@@ -1,0 +1,18 @@
+{
+  "drivers": [{
+    "id": "D0",
+    "name": "<driver name>",
+    "evidence": [{"evidence_id":"<existing visible input ID>","kind":"history|covariate|calendar|context","as_of":"<source as_of or null>","availability_basis":"<copy supplied manifest qualification>","quote_or_feature":"<supported quote or feature>"}],
+    "mechanism": "<qualified public interpretation>",
+    "relevance": "high|medium|low",
+    "impact_windows": [{"start":0,"stop":24,"effect":"up|down|mixed|uncertain"}],
+    "interactions": [{"with_driver_id":"D1","description":"<qualified relationship>"}],
+    "uncertainty": "<driver uncertainty>"
+  }],
+  "global_uncertainty": "<case uncertainty>",
+  "evidence_ids_used": ["<referenced evidence ID>"],
+  "mode": "DIRECT|FACTORIZE",
+  "spans": [{"segment_id":"S0","start":0,"stop":24}]
+}
+
+Schema rules: the displayed `|` alternatives are enums; substitute one real member. Driver IDs and referenced driver IDs must exist; `evidence_ids_used` equals the set referenced by driver evidence. Cite IDs present in the supplied evidence manifest and public case, using visible aliases such as E1/X1 where applicable rather than unavailable raw source IDs. `as_of` and `availability_basis` copy manifest facts, including null/unknown when the source is unknown; never invent a publication time or operational availability. Preserve retrospective post-origin material as explicitly retrospective rather than forcing its timestamp before the origin. Forecast origin, issue time and publication/availability time are distinct; do not silently substitute one for another. Empty drivers/interactions are legal when evidence supports none. Impact windows are proposed plausible support over the future grid; broad `[0,H)` with `uncertain` is legal when timing is poorly localized, and must not masquerade as precise event timing. Every driver field is present; every span uses concrete valid bounds. Each object disallows unlisted keys.

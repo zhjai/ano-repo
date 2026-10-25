@@ -1,0 +1,23 @@
+Finalize the complete {{horizon_points}}-position electricity load forecast, from {{first_forecast_timestamp}} to {{last_forecast_timestamp}}, in {{unit_phrase}}, using the final segment reports.
+
+Check level, units, event timing, duration, lag and recovery across segments. Keep the assembled values when no bounded edit is justified; do not smooth a jump supported by the evidence.
+
+Forecast evidence:
+{{public_case}}
+
+Forecast specification:
+{{geometry}}
+
+Accepted interpretation and plan:
+{{accepted_t1}}
+
+Final complete segment reports:
+{{final_segment_reports}}
+
+Actual reflection history and termination status:
+{{reflection_history_and_termination}}
+
+Authorized edit boundaries, bands and all edit limits:
+{{t4_policy}}
+
+Explain the finalization decision in natural English, then return KEEP or REGENERATE using the prescribed answer JSON. Any edits must satisfy every supplied limit; all positions outside those edits retain their supplied values.

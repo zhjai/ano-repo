@@ -1,0 +1,20 @@
+Plan the electricity load forecast for {{horizon_points}} positions, from {{first_forecast_timestamp}} to {{last_forecast_timestamp}}, in {{unit_phrase}}. Interpret the evidence and choose either one complete-horizon forecast or independent contiguous segment forecasts. Do not generate load values in this planning step.
+
+Forecast positions count from zero at future_timestamps[0], not from the step numbers in any data table. Preserve the supplied clock basis and source qualifications.
+
+Compute limits for this plan:
+{{compute_policy}}
+
+Forecast evidence:
+{{public_case}}
+
+Forecast specification:
+{{geometry}}
+
+Evidence you may cite, with source qualifications:
+{{evidence_manifest}}
+
+Required interpretation and plan schema:
+{{t1_schema}}
+
+Explain your interpretation and planning decision in natural English, then return the complete interpretation and plan together using the prescribed answer JSON. The plan must cover all {{horizon_points}} positions.

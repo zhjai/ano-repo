@@ -1,0 +1,5 @@
+Produce one complete forecast for the supplied horizon. Explain the historical patterns and context that matter for this case, their plausible timing, and uncertainties. Do not force an event-based explanation when history or covariates are the main evidence.
+
+Return your own actual predicted load values in chronological order. The answer object must contain exactly one key:
+{"values":[...]}
+The array must contain exactly H numbers, where H is supplied in the forecast specification. Its first number belongs to future_timestamps[0] and its last to future_timestamps[H-1]. Do not output a diagnostic table or omit any future position.

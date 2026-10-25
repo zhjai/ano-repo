@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "elecload"
+version = "0.1.0"
+description = "Multiple-event electricity load forecasting runtime and episode SFT"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+hf = ["torch>=2.6,<3", "transformers>=5.3,<6", "accelerate>=1.10,<2"]
+dev = ["pytest>=8,<10"]
+
+[tool.setuptools.packages.find]
+include = ["castfactory*", "scripts*"]
+
+[tool.setuptools.package-data]
+"castfactory.agentic" = ["prompts/merged_t1_answer_v1/*.txt"]

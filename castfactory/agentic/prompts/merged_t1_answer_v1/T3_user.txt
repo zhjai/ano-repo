@@ -1,0 +1,23 @@
+Review the current segment forecasts and their explanations for the {{horizon_points}}-position electricity load forecast, from {{first_forecast_timestamp}} to {{last_forecast_timestamp}}, in {{unit_phrase}}. Decide whether an eligible segment needs evidence-based reassessment or reflection should stop.
+
+Your full explanation stays in the main-agent trajectory. Only the permitted, bound diagnostic feedback is sent to the selected child; do not use it to transmit other segments' predictions.
+
+Forecast evidence:
+{{public_case}}
+
+Forecast specification:
+{{geometry}}
+
+Accepted interpretation and plan:
+{{accepted_t1}}
+
+Current complete segment reports:
+{{current_segment_reports}}
+
+Actual feedback and revision history:
+{{reflection_history}}
+
+Remaining compute, eligible segments and protected finalization:
+{{reflection_policy_state}}
+
+Explain your decision in natural English, then return STOP or one permitted REFINE action using the prescribed answer JSON. A refined child must return its complete original segment before you reassess it.

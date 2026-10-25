@@ -1,0 +1,11 @@
+{
+  "profile_version": "merged-t1-answer-v1",
+  "max_segments": 4,
+  "min_segment_length": 6,
+  "max_refinements": 2,
+  "structural_retries": 1,
+  "t4_max_patch_steps": 4,
+  "t4_max_total_steps": 8,
+  "max_response_tokens": 4096,
+  "max_context_tokens": 32768
+}

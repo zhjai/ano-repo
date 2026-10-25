@@ -1,0 +1,13 @@
+Forecast electricity load for all {{horizon_points}} positions, from {{first_forecast_timestamp}} to {{last_forecast_timestamp}}, in {{unit_phrase}}. Return exactly {{horizon_points}} values in the supplied timestamp order.
+
+Forecast positions count from zero at future_timestamps[0], not from the step numbers in any historical data table. Preserve the supplied clock basis; do not infer a time zone that the source does not state.
+
+Use the historical observations, available covariates and contextual evidence below to explain and forecast the complete horizon.
+
+Forecast evidence:
+{{public_case}}
+
+Forecast specification:
+{{geometry}}
+
+Explain the evidence behind your forecast in natural English, then return all {{horizon_points}} values using the prescribed answer JSON.

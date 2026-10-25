@@ -1,0 +1,24 @@
+Review the complete interpretation and plan for this {{horizon_points}}-position electricity load forecast, from {{first_forecast_timestamp}} to {{last_forecast_timestamp}}, in {{unit_phrase}}. This is an offline, privileged review of every complete first-pass T1 response.
+
+Forecast evidence:
+{{public_case}}
+
+Forecast specification:
+{{geometry}}
+
+Public evidence and its source qualifications:
+{{evidence_manifest}}
+
+Compute limits for this plan:
+{{compute_policy}}
+
+Required interpretation and plan schema:
+{{t1_schema}}
+
+Complete first-pass interpretation and plan:
+{{t1_pass1_public_response}}
+
+Privileged canonical training labels, in the same timestamp order and units:
+{{canonical_labels}}
+
+Apply the prescribed review rules and return KEEP or a complete rewritten public explanation and T1 object using the review answer JSON. Keep privileged labels and review provenance out of the public response.

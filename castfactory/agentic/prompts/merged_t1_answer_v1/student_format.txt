@@ -1,0 +1,1 @@
+Write the public explanation inside one <think>...</think> block, then the single <answer>...</answer> block. Do not add a result, payload or metadata block.
