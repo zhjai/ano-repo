@@ -389,9 +389,15 @@ def read_export_receipt(path, candidate=None):
     eos = receipt.get("generation_eos", {})
     if eos:
         generation = json.loads((model / "generation_config.json").read_text())
+        # Trainer may serialize the tokenizer's one EOS as a singleton list.
+        # Accept that representation only; multiple termination IDs change the
+        # generation contract and must still fail receipt verification.
+        saved_eos = generation.get("eos_token_id")
+        if isinstance(saved_eos, list) and len(saved_eos) == 1:
+            saved_eos = saved_eos[0]
         if (type(eos.get("eos_token_id")) is not int or eos["eos_token_id"] < 0
                 or eos.get("source") != "effective_chat_tokenizer"
-                or generation.get("eos_token_id") != eos["eos_token_id"]):
+                or type(saved_eos) is not int or saved_eos != eos["eos_token_id"]):
             raise ValueError("SFT export generation EOS differs from its native tokenizer receipt")
     elif receipt["status"] != "full_parameter_sft_completed":
         raise ValueError("Checkpoint export requires its bound native generation EOS")

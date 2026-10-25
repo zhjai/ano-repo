@@ -17,4 +17,12 @@ Verification distinguishes standard-library contract tests, optional CPU model t
 
 The subsequent DIRECT correction changes the released runtime to return after whole-horizon T2, without T3/T4. It is a separate change from the source export. Existing paper measurements were not rerun or replaced.
 
-Final verification: 115 tests passed in the reference Python/PyTorch environment with GPU visibility disabled, including actual local tokenizer and tiny-model CPU tests (zero skips). The dependency-free environment passed the same suite with 11 optional ML/tokenizer checks skipped. The built wheel loaded all 20 prompt resources; synthetic workflow and separate-label evaluation CLI checks passed. No large-model GPU training or paper-result reproduction was run.
+Initial publication verification: 115 tests passed in the reference Python/PyTorch environment with GPU visibility disabled, including actual local tokenizer and tiny-model CPU tests (zero skips). The dependency-free environment passed the same suite with 11 optional ML/tokenizer checks skipped. The built wheel loaded all 20 prompt resources; synthetic workflow and separate-label evaluation CLI checks passed. No large-model GPU training or paper-result reproduction was run.
+
+## Training component continuation (0.3.0)
+
+The source Reasoning HF backend and load reward, differentiable paired/PPO credit kernel, and native FSDP SFT loss hook are now included. Reward parser helpers were extracted unchanged as a dependency closure; the backend imports that portable parser module. New wrappers provide strict Reasoning SFT input validation and compact inference asset configuration. Source loss mathematics and objective-version selection are retained.
+
+An actual CPU optimizer/save/reload smoke uncovered a Transformers EOS serialization mismatch (`2` versus `[2]`) in the Agent checkpoint receipt. The reader now accepts exactly those equivalent single-token representations and rejects different/multiple IDs or invalid types. The successful smoke performs real parameter updates in both SFT backends using only random tiny models and synthetic inputs. Full cluster training and paper-result reproduction remain outside the verified scope.
+
+Continuation verification: 182 tests passed with GPU visibility disabled in the reference environment, with zero skips; the local environment without ML dependencies passed with 43 optional checks skipped. The two real CPU SFT smoke runs each completed one optimizer step and changed parameters, followed by successful HF reloads. The reference environment emitted a nonfatal `multiprocess.resource_tracker` cleanup warning at interpreter shutdown; the commands returned success and their reports/checkpoints were written.

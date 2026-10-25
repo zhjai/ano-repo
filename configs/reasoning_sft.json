@@ -1,0 +1,23 @@
+{
+  "backend": {
+    "max_prompt_length": 25600,
+    "max_response_length": 4096,
+    "max_length": 29696,
+    "response_loss_mode": "all",
+    "response_only_logits": false,
+    "compute_forecast_metrics": false
+  },
+  "training_args": {
+    "num_train_epochs": 2,
+    "per_device_train_batch_size": 1,
+    "gradient_accumulation_steps": 1,
+    "learning_rate": 0.000005,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.05,
+    "lr_scheduler_type": "cosine",
+    "save_strategy": "epoch",
+    "logging_steps": 1,
+    "report_to": [],
+    "seed": 17
+  }
+}
