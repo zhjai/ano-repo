@@ -115,4 +115,4 @@ Agent RL's differentiable PPO/paired-credit objective is exposed as `castfactory
 | Future-normalized metrics and rewards | `castfactory/training/full_agent_metrics.py`, `full_agent_reward.py` |
 | Contract, leakage, runtime and objective tests | `tests/agentic/` |
 
-[Release notes](docs/release.md) document provenance, portable changes, and verification boundaries. This project replaces the previous STaR working tree; that unrelated project's history remains in Git.
+[Release notes](docs/release.md) describe the included components, portable adaptations, and verification.
